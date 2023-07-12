@@ -13,8 +13,8 @@ public class TraktApi
         _httpClient.DefaultRequestHeaders.Add("trakt-api-version", "2");
     }
 
-    public Task<string>GenerateNewDeviceCode()
-    {
-        _httpClient.PostAsync
-    }
+    // public Task<string>GenerateNewDeviceCode()
+    // {
+    //     //_httpClient.PostAsync
+    // }
 }

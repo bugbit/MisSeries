@@ -1,4 +1,5 @@
 ﻿@page "/"
+@inject NavigationManager NavigationManager
 
 <PageTitle>Index</PageTitle>
 
@@ -6,12 +7,31 @@
 
 Welcome to your new app.
 
-
+clientId:
+<InputText @bind-Value="clientId" />
+<button @onclick="Authenticate">Authenticate</button>
 
 <SurveyPrompt Title="How is Blazor working for you?" />
 
 @code
 {
     string clientId = "";
-    string clientSecret = "";
+    //string clientSecret = "";
+
+    void Authenticate()
+    {
+        var baseuri = NavigationManager.BaseUri;
+        var uri = NavigationManager.GetUriWithQueryParameters
+        (
+        "https://trakt.tv/oauth/authorize",
+        new Dictionary<string, object?>
+            {
+                ["client_id"] = clientId,
+                ["redirect_uri"] = baseuri,
+                ["response_type"] = "code"
+            }
+        );
+
+        NavigationManager.NavigateTo(uri, true);
+    }
 }
