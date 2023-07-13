@@ -29,7 +29,7 @@ jobs:
       - name: Echo secrets
         run: |
           echo $TEST_ENV_FILE >> MisSeries.Web/Native/secrets.h
-          cat src/your_directory_here/your_file_name.here
+          cat MisSeries.Web/Native/secrets.h
         shell: bash
         env:
           # Feel free to rename this variable, but make sure to update it everywhere. You should paste your entire file in your secrets
