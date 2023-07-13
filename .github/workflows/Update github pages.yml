@@ -28,16 +28,16 @@ jobs:
      # Modify secrets
       - name: Echo secrets
         run: |
-          echo $TEST_ENV_FILE >> Native/secrets.h
+          echo $TEST_ENV_FILE >> MisSeries.Web/Native/secrets.h
           cat src/your_directory_here/your_file_name.here
         shell: bash
         env:
           # Feel free to rename this variable, but make sure to update it everywhere. You should paste your entire file in your secrets
-          TEST_ENV_FILE : ${{secrets.YOUR_SECRET_NAME}}
+          TEST_ENV_FILE : ${{secrets.SECRETS_H}}
           
       # Publishes Blazor project to the release-folder
       - name: Publish .NET Core Project
-        run: dotnet publish MisSeries.Web.csproj -c:Release -p:GHPages=true -o dist/Web --nologo
+        run: dotnet publish MisSeries.Web/MisSeries.Web.csproj -c:Release -p:GHPages=true -o dist/Web --nologo
 
       - name: Commit wwwroot to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
