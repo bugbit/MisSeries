@@ -1,0 +1,47 @@
+name: github pages
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the code
+      - uses: actions/checkout@v2
+
+      # Install .NET Core SDK
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 7.0.x
+          
+      # Install dotnet wasm buildtools workload
+      - name: Install .NET WASM Build Tools
+        run: dotnet workload install wasm-tools
+        
+     # Modify secrets
+      - name: Echo secrets
+        run: |
+          echo $TEST_ENV_FILE >> Native/secrets.h
+          cat src/your_directory_here/your_file_name.here
+        shell: bash
+        env:
+          # Feel free to rename this variable, but make sure to update it everywhere. You should paste your entire file in your secrets
+          TEST_ENV_FILE : ${{secrets.YOUR_SECRET_NAME}}
+          
+      # Publishes Blazor project to the release-folder
+      - name: Publish .NET Core Project
+        run: dotnet publish MisSeries.Web.csproj -c:Release -p:GHPages=true -o dist/Web --nologo
+
+      - name: Commit wwwroot to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          token: ${{ secrets.PUBLISH_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: dist/Web/wwwroot
