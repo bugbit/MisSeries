@@ -7,9 +7,21 @@
 
 Welcome to your new app.
 
+@{
+    var bs = System.Text.Encoding.UTF8.GetBytes("hola");
+}
+@foreach (var b in bs)
+{
+    @b
+    <br />
+}
+
 clientId:
 <InputText @bind-Value="clientId" />
 <button @onclick="Authenticate">Authenticate</button>
+<button @onclick="AuthenticateIframe">Authenticate Iframe</button>
+
+<iframe src="@src" onload="()=>alert(this.src)"></iframe>
 
 <SurveyPrompt Title="How is Blazor working for you?" />
 
@@ -17,21 +29,28 @@ clientId:
 {
     string clientId = "";
     //string clientSecret = "";
+    string src;
 
     void Authenticate()
     {
-        var baseuri = NavigationManager.BaseUri;
+        var redirect_uri = NavigationManager.BaseUri;
+        //var redirect_uri = "urn:ietf:wg:oauth:2.0:oob";
         var uri = NavigationManager.GetUriWithQueryParameters
         (
         "https://trakt.tv/oauth/authorize",
         new Dictionary<string, object?>
             {
                 ["client_id"] = clientId,
-                ["redirect_uri"] = baseuri,
+                ["redirect_uri"] = redirect_uri,
                 ["response_type"] = "code"
             }
         );
 
         NavigationManager.NavigateTo(uri, true);
+    }
+
+    void AuthenticateIframe()
+    {
+        src = "https://google.es";
     }
 }
