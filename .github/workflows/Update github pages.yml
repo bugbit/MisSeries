@@ -28,12 +28,13 @@ jobs:
      # Modify secrets
       - name: Echo secrets
         run: |
-          echo $TEST_ENV_FILE >> MisSeries.Web/Native/secrets.h
+          echo $TEST_ENV_FILE
+          echo $TEST_ENV_FILE > MisSeries.Web/Native/secrets.h
           cat MisSeries.Web/Native/secrets.h
         shell: bash
         env:
           # Feel free to rename this variable, but make sure to update it everywhere. You should paste your entire file in your secrets
-          TEST_ENV_FILE : ${{secrets.SECRETS_H}}
+          TEST_ENV_FILE : ${{ secrets.SECRETS_H }}
           
       # Publishes Blazor project to the release-folder
       - name: Publish .NET Core Project
