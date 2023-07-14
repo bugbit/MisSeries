@@ -1,6 +1,7 @@
 ﻿@page "/"
 @using MisSeries.Web.Services;
 @inject TraktApi TraktApi
+@inject IStringLocalizer<Index> Loc
 
 <PageTitle>Index</PageTitle>
 
@@ -9,7 +10,7 @@
 Welcome to your new app.
 
 <SurveyPrompt Title="How is Blazor working for you?" />
-<button @onclick="Test">Test</button>
+<button @onclick="Test">@Loc["Test"]</button>
 <span>Result:@result</span>
 @code
 {

@@ -9,4 +9,6 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped<TraktApi>();
 
+builder.Services.AddLocalization(opts => opts.ResourcesPath = "Resources");
+
 await builder.Build().RunAsync();
