@@ -1,0 +1,19 @@
+POST https://api.trakt.tv/oauth/device/code?client_id=
+###
+
+POST https://api.trakt.tv/oauth/token?code=&client_id=&client_secret=&redirect_uri=&grant_type=authorization_code
+
+###
+
+/*
+Contenido:
+{
+  "access_token": "6dc9ab5adde21031972999c74967885f8377f3b6077cc7e995b499f3a1587872",
+  "token_type": "Bearer",
+  "expires_in": 7889237, // Seconds
+  "refresh_token": "3b973a66becee3e618f6d9559b1435452ba0370d830d3dc7f20782e96b3c1da3",
+  "scope": "public",
+  "created_at": 1689243127
+}
+
+*/

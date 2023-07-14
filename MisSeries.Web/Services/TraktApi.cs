@@ -4,6 +4,7 @@ using System.Text;
 
 namespace MisSeries.Web.Services
 {
+    // API Blueprint Viewer
     public class TraktApi
     {
         unsafe public string Prueba()
