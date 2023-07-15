@@ -1,4 +1,10 @@
 ﻿#include <memory.h>
+/*
+Create file secret.h:
+const char cliendId[] = "your client id";
+const char clientSecret[] = "your client secret";
+
+*/
 #include "secrets.h"
 
 #define MIN(a,b) ((a) < (b) ? a : b)
