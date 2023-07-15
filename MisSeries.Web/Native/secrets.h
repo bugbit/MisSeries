@@ -1,1 +1,2 @@
-﻿const char cliendId[] = "1234567890";
+﻿const char cliendId[] = "your client id";
+const char clientSecret[] = "your client secret";

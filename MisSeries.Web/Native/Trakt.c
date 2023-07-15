@@ -11,3 +11,12 @@ int getClientId(unsigned char* data, int maxlen)
 
 	return size;
 }
+
+int getClientSecret(unsigned char* data, int maxlen)
+{
+	int size = MIN(sizeof(clientSecret) - 1, maxlen);
+
+	memcpy(data, clientSecret, size);
+
+	return size;
+}
