@@ -117,7 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Test" xml:space="preserve">
-    <value>Test EN</value>
+  <data name="BadRequest" xml:space="preserve">
+    <value>¡No se ha podido analizar la solicitud!</value>
+  </data>
+  <data name="ServerError" xml:space="preserve">
+    <value>Por favor, abre un ticket de soporte.</value>
+  </data>
+  <data name="ServiceUnavailable" xml:space="preserve">
+    <value>servidor sobrecargado (inténtalo de nuevo en 30 segundos)!</value>
+  </data>
+  <data name="ServiceUnavailable2" xml:space="preserve">
+    <value>¡Error de Cloudflare!</value>
   </data>
 </root>

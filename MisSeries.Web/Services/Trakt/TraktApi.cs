@@ -11,11 +11,13 @@ namespace MisSeries.Web.Services.Trakt
         private static Lazy<string> _clientId = new(() => GetClientId());
         private static Lazy<string> _clientSecret = new(() => GetClientSecret());
         private readonly NavigationManager _navigationManager;
+        private readonly HttpClient _httpClient;
         private string? _authorization;
 
-        public TraktApi(NavigationManager navigationManager)
+        public TraktApi(NavigationManager navigationManager, HttpClient httpClient)
         {
             _navigationManager = navigationManager;
+            _httpClient = httpClient;
         }
 
         public void SetAuthorization(string token_type, string access_token)
