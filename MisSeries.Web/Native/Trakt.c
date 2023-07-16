@@ -1,8 +1,8 @@
 ﻿#include <memory.h>
 /*
 Create file secret.h:
-const char cliendId[] = "your client id";
-const char clientSecret[] = "your client secret";
+const char cliendId[] = "your trakt client id";
+const char clientSecret[] = "your trakt client secret";
 
 */
 #include "secrets.h"

@@ -23,14 +23,14 @@ namespace MisSeries.Web.Services.Trakt
             _authorization = $"{token_type} {access_token}";
         }
 
-        public string GetUrlAuthorize(string returnUrl)
+        public string GetUrlAuthorize(string redirect_uri)
             => _navigationManager.GetUriWithQueryParameters
                 (
                     "https://trakt.tv/oauth/authorize",
                     new Dictionary<string, object?>
                     {
                         ["client_id"] = _clientId.Value,
-                        ["redirect_uri"] = returnUrl,
+                        ["redirect_uri"] = redirect_uri,
                         ["response_type"] = "code"
                     }
                 );
