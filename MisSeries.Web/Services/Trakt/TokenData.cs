@@ -7,4 +7,5 @@ public class TokenData
     public required string RefreshType { get; set; }
     public required DateTime ExpirateDate { get; set; }
     public required string Username { get; set; }
+    public required string Slug { get; set; }
 }

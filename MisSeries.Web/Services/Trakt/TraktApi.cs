@@ -15,21 +15,24 @@ namespace MisSeries.Web.Services.Trakt
         private static Lazy<string> _clientId = new(() => GetClientId());
         private static Lazy<string> _clientSecret = new(() => GetClientSecret());
         private readonly NavigationManager _navigationManager;
-        private readonly HttpClient _httpClient;
         private readonly IStringLocalizer _Localizer;
-        private string? _authorization;
+        private readonly HttpClient _httpClient;
 
-        public TraktApi(NavigationManager navigationManager, HttpClient httpClient, IStringLocalizer<TraktApi> localizer)
+        public TraktApi(NavigationManager navigationManager, IStringLocalizer<TraktApi> localizer)
         {
             _navigationManager = navigationManager;
-            _httpClient = httpClient;
+            _httpClient = new HttpClient
+            {
+                BaseAddress = new Uri("https://api.trakt.tv")
+            };
             _Localizer = localizer;
-            _httpClient.BaseAddress = new Uri("https://api.trakt.tv");
         }
 
         public void SetAuthorization(string token_type, string access_token)
         {
-            _authorization = $"{token_type} {access_token}";
+            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue($"{token_type} {access_token}");
+            _httpClient.DefaultRequestHeaders.Add("trakt-api-version", "2");
+            _httpClient.DefaultRequestHeaders.Add("trakt-api-key", _clientId.Value);
         }
 
         public string GetUrlAuthorize(string redirect_uri)
@@ -44,20 +47,35 @@ namespace MisSeries.Web.Services.Trakt
                     }
                 );
 
-        public async Task<ApiTokenResponse> TokenAsync(string code)
+        public async Task<ApiTokenResponse> TokenAsync(string code, CancellationToken cancellationToken)
         {
             var uri = new Uri(_httpClient.BaseAddress!, "/oauth/token");
-            var response = await _httpClient.PostAsJsonAsync(uri.ToString(), new ApiTokenRequest
+            var response = await _httpClient.PostAsJsonAsync(uri, new ApiTokenRequest
             {
                 Client_id = _clientId.Value,
                 Client_secret = _clientSecret.Value,
                 Code = code,
                 Redirect_uri = _navigationManager.ToAbsoluteUri("login").ToString(),
                 Grant_type = GrantTypes.AuthorizationCode
-            });
+            }, cancellationToken);
+
+            cancellationToken.ThrowIfCancellationRequested();
 
             if (response.IsSuccessStatusCode)
                 return await response.Content.ReadFromJsonAsync<ApiTokenResponse>() ?? new();
+
+            throw TraktApiException.CreateByStatusCode(response.StatusCode, _Localizer);
+        }
+
+        public async Task<ApiUsersSettingsRequest> UsersSettingsAsync(CancellationToken cancellationToken)
+        {
+            var uri = new Uri(_httpClient.BaseAddress!, "/users/settings");
+            var response = await _httpClient.GetAsync(uri, cancellationToken);
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            if (response.IsSuccessStatusCode)
+                return await response.Content.ReadFromJsonAsync<ApiUsersSettingsRequest>() ?? new();
 
             throw TraktApiException.CreateByStatusCode(response.StatusCode, _Localizer);
         }

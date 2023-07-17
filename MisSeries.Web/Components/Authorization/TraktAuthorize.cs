@@ -19,7 +19,8 @@ public class TraktAuthorize : ComponentBase
             new Dictionary<string, object?>
             { ["returnUrl"] = returnUrl }
         );
-        var uri = TraktApi.GetUrlAuthorize(returnUrl);
+        //var uri = TraktApi.GetUrlAuthorize(returnUrl);
+        var uri = TraktApi.GetUrlAuthorize(urlLogin);
 
         NavManager.NavigateTo(uri);
     }

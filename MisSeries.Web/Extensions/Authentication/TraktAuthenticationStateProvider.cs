@@ -23,18 +23,7 @@ public class TraktAuthenticationStateProvider : AuthenticationStateProvider
 
         if (storedToken != null)
         {
-            claimsIdentity = new ClaimsIdentity();
-
-            // Crear ClaimsPrincipal con estos datos,
-            // configurar encabezado de autorización por defecto,
-            // y retornar un AuthenticationState() con el ClaimsPrincipal
-
-            var claims = new List<Claim>()
-            {
-                new Claim(ClaimTypes.Name, storedToken.Username)
-            };
-
-            claimsIdentity = new ClaimsIdentity(claims, "trakt");
+            claimsIdentity = CreateIdentity(storedToken);
             _traktApi.SetAuthorization(storedToken.TokenType, storedToken.AccessToken);
         }
         else
@@ -43,5 +32,38 @@ public class TraktAuthenticationStateProvider : AuthenticationStateProvider
         var principal = new ClaimsPrincipal(claimsIdentity);
 
         return new AuthenticationState(principal);
+    }
+
+    private static ClaimsIdentity CreateIdentity(TokenData storedToken)
+    {
+        var claimsIdentity = new ClaimsIdentity();
+
+        // Crear ClaimsPrincipal con estos datos,
+        // configurar encabezado de autorización por defecto,
+        // y retornar un AuthenticationState() con el ClaimsPrincipal
+
+        var claims = new List<Claim>()
+        {
+            new Claim(ClaimTypes.Name, storedToken.Username),
+            new Claim(ClaimTypes.NameIdentifier, storedToken.Slug),
+            new Claim(ClaimTypes.Expiration, storedToken.ExpirateDate.ToShortTimeString())
+        };
+
+        claimsIdentity = new ClaimsIdentity(claims, "trakt");
+
+        return claimsIdentity;
+    }
+
+    public async Task SetCurrentUserAsync(TokenData userData, CancellationToken cancellationToken)
+    {
+        await _sessionStorage.SetItemAsync("token", userData, cancellationToken);
+
+        cancellationToken.ThrowIfCancellationRequested();
+
+        var claimsIdentity = CreateIdentity(userData);
+        var principal = new ClaimsPrincipal(claimsIdentity);
+        var authState = new AuthenticationState(principal);
+
+        NotifyAuthenticationStateChanged(Task.FromResult(authState));
     }
 }
