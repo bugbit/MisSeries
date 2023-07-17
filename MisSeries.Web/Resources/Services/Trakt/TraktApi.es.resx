@@ -126,7 +126,10 @@
   <data name="ServiceUnavailable" xml:space="preserve">
     <value>servidor sobrecargado (inténtalo de nuevo en 30 segundos)!</value>
   </data>
-  <data name="ServiceUnavailable2" xml:space="preserve">
-    <value>¡Error de Cloudflare!</value>
+  <data name="VIPOnly" xml:space="preserve">
+    <value>Solo VIP: ¡el usuario debe actualizar a VIP!</value>
+  </data>
+  <data name="CallApiError" xml:space="preserve">
+    <value>Error {0}</value>
   </data>
 </root>

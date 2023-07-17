@@ -1,7 +1,11 @@
-﻿using System.Reflection.PortableExecutable;
+﻿using System.Net.Http.Json;
+using System.Reflection.PortableExecutable;
 using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Localization;
+using MisSeries.Web.Services.Trakt.Request;
+using MisSeries.Web.Services.Trakt.Response;
 
 namespace MisSeries.Web.Services.Trakt
 {
@@ -12,12 +16,15 @@ namespace MisSeries.Web.Services.Trakt
         private static Lazy<string> _clientSecret = new(() => GetClientSecret());
         private readonly NavigationManager _navigationManager;
         private readonly HttpClient _httpClient;
+        private readonly IStringLocalizer _Localizer;
         private string? _authorization;
 
-        public TraktApi(NavigationManager navigationManager, HttpClient httpClient)
+        public TraktApi(NavigationManager navigationManager, HttpClient httpClient, IStringLocalizer<TraktApi> localizer)
         {
             _navigationManager = navigationManager;
             _httpClient = httpClient;
+            _Localizer = localizer;
+            _httpClient.BaseAddress = new Uri("https://api.trakt.tv");
         }
 
         public void SetAuthorization(string token_type, string access_token)
@@ -36,6 +43,24 @@ namespace MisSeries.Web.Services.Trakt
                         ["response_type"] = "code"
                     }
                 );
+
+        public async Task<ApiTokenResponse> TokenAsync(string code)
+        {
+            var uri = new Uri(_httpClient.BaseAddress!, "/oauth/token");
+            var response = await _httpClient.PostAsJsonAsync(uri.ToString(), new ApiTokenRequest
+            {
+                Client_id = _clientId.Value,
+                Client_secret = _clientSecret.Value,
+                Code = code,
+                Redirect_uri = _navigationManager.ToAbsoluteUri("login").ToString(),
+                Grant_type = GrantTypes.AuthorizationCode
+            });
+
+            if (response.IsSuccessStatusCode)
+                return await response.Content.ReadFromJsonAsync<ApiTokenResponse>() ?? new();
+
+            throw TraktApiException.CreateByStatusCode(response.StatusCode, _Localizer);
+        }
 
         unsafe static private string GetClientId()
         {

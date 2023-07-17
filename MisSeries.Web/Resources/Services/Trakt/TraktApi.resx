@@ -106,7 +106,10 @@
   <data name="ServiceUnavailable" xml:space="preserve">
     <value>server overloaded (try again in 30s)</value>
   </data>
-  <data name="ServiceUnavailable2" xml:space="preserve">
-    <value>Cloudflare error</value>
+  <data name="VIPOnly" xml:space="preserve">
+    <value>VIP Only - user must upgrade to VIP</value>
+  </data>
+  <data name="CallApiError" xml:space="preserve">
+    <value>Error {0}</value>
   </data>
 </root>
