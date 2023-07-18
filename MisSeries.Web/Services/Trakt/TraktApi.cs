@@ -30,7 +30,7 @@ namespace MisSeries.Web.Services.Trakt
 
         public void SetAuthorization(string token_type, string access_token)
         {
-            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue($"{token_type} {access_token}");
+            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue(token_type, access_token);
             _httpClient.DefaultRequestHeaders.Add("trakt-api-version", "2");
             _httpClient.DefaultRequestHeaders.Add("trakt-api-key", _clientId.Value);
         }

@@ -37,7 +37,7 @@ public class TraktAccountServices
             RefreshType = response.Refresh_token ?? string.Empty,
             ExpirateDate = DateTime.Now.AddSeconds(response.Expires_in.GetValueOrDefault()),
             Username = responseUser.User?.Username ?? string.Empty,
-            Slug = responseUser.Ids?.Slug ?? string.Empty,
+            Slug = responseUser.User?.Ids?.Slug ?? string.Empty,
         };
 
         await _traktAuthenticationStateProvider.SetCurrentUserAsync(data, cancellationToken);

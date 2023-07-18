@@ -13,6 +13,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddScoped<TraktApi>();
 builder.Services.AddScoped<AuthenticationStateProvider, TraktAuthenticationStateProvider>();
 builder.Services.AddScoped<TraktAuthenticationStateProvider, TraktAuthenticationStateProvider>();
+builder.Services.AddScoped<TraktAccountServices, TraktAccountServices>();
 
 builder.Services.AddLocalization(opts => opts.ResourcesPath = "Resources");
 
