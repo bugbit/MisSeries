@@ -1,1 +1,0 @@
-﻿const char cliendId[] = "1234567890";

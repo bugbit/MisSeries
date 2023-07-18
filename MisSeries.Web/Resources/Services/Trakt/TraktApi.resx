@@ -97,7 +97,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Test" xml:space="preserve">
-    <value>Test default</value>
+  <data name="BadRequest" xml:space="preserve">
+    <value>request couldn’t be parsed</value>
+  </data>
+  <data name="ServerError" xml:space="preserve">
+    <value>please open a support ticket</value>
+  </data>
+  <data name="ServiceUnavailable" xml:space="preserve">
+    <value>server overloaded (try again in 30s)</value>
+  </data>
+  <data name="VIPOnly" xml:space="preserve">
+    <value>VIP Only - user must upgrade to VIP</value>
+  </data>
+  <data name="CallApiError" xml:space="preserve">
+    <value>Error {0}</value>
   </data>
 </root>

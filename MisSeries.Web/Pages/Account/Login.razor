@@ -1,0 +1,36 @@
+@page "/login"
+@inject TraktAccountServices TraktAccountSrv
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <h1>Login</h1>
+    <h5>@errorMessage</h5>
+}
+
+@code
+{
+    [SupplyParameterFromQuery, Parameter] public string? Code { get; set; }
+    [SupplyParameterFromQuery, Parameter] public string? Error { get; set; }
+    [SupplyParameterFromQuery, Parameter] public string? Error_description { get; set; }
+    string? errorMessage = null;
+
+    protected async override Task OnInitializedAsync()
+    {
+        if (!string.IsNullOrEmpty(Error) && !string.IsNullOrEmpty(Error_description))
+        {
+            errorMessage = $"{Error}. {Error_description}";
+        }
+        else if (!string.IsNullOrEmpty(Code))
+        {
+            try
+            {
+                await TraktAccountSrv.LoginAsync(Code, CancellationToken.None);
+            }
+            catch (Exception ex)
+            {
+                errorMessage = ex.Message;
+            }
+        }
+        await base.OnInitializedAsync();
+    }
+}
