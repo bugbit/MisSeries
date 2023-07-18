@@ -64,6 +64,23 @@ public class TraktAuthenticationStateProvider : AuthenticationStateProvider
         var principal = new ClaimsPrincipal(claimsIdentity);
         var authState = new AuthenticationState(principal);
 
+        /*
+		    * El método NotifyAuthenticationStateChanged(), proporcionado por la clase base, notifica a todos los componentes suscritos del cambio de estado,
+		    * a la vez que les envía la tarea (en este caso, resuelta) para obtener el estado de autenticación actual.
+		*/
         NotifyAuthenticationStateChanged(Task.FromResult(authState));
+    }
+
+    public async Task ClearCurrentUser(CancellationToken cancellationToken)
+    {
+        var anonymousPrincipal = new ClaimsPrincipal(new ClaimsIdentity());
+        var authStateTask = Task.FromResult(new AuthenticationState(anonymousPrincipal));
+
+        await _sessionStorage.RemoveItemAsync("token", cancellationToken);
+        /*
+         * El método NotifyAuthenticationStateChanged(), proporcionado por la clase base, notifica a todos los componentes suscritos del cambio de estado,
+         * a la vez que les envía la tarea (en este caso, resuelta) para obtener el estado de autenticación actual.
+         */
+        NotifyAuthenticationStateChanged(authStateTask);
     }
 }

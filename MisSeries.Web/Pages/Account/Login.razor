@@ -1,6 +1,5 @@
 @page "/login"
 @inject TraktAccountServices TraktAccountSrv
-@inject NavigationManager NavManager
 
 @if (!string.IsNullOrEmpty(errorMessage))
 {
@@ -11,7 +10,6 @@
 @code
 {
     [SupplyParameterFromQuery, Parameter] public string? Code { get; set; }
-    [SupplyParameterFromQuery, Parameter] public string? ReturnUrl { get; set; }
     [SupplyParameterFromQuery, Parameter] public string? Error { get; set; }
     [SupplyParameterFromQuery, Parameter] public string? Error_description { get; set; }
     string? errorMessage = null;
@@ -27,10 +25,6 @@
             try
             {
                 await TraktAccountSrv.LoginAsync(Code, CancellationToken.None);
-
-                var returnUrl = ReturnUrl ?? NavManager.ToAbsoluteUri("").ToString();
-
-                NavManager.NavigateTo(returnUrl, false);
             }
             catch (Exception ex)
             {
