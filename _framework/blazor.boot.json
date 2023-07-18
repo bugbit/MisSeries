@@ -7,7 +7,7 @@
   "linkerEnabled": true,
   "resources": {
     "assembly": {
-      "Blazored.SessionStorage.dll": "sha256-Y5WVl4GeKE4HMIAYngGySxcPse+7tZjlwyN0jaZSWS4=",
+      "Blazored.LocalStorage.dll": "sha256-eXVgTw72kEn74FZgDQbLtvAmXbiZDSj5gzUnxVmwowQ=",
       "Microsoft.AspNetCore.Authorization.dll": "sha256-\/+kXuIWKob6jWfQwkCJepjpK2OVtTf2crMIaZrreymk=",
       "Microsoft.AspNetCore.Components.Authorization.dll": "sha256-f6gFeIiXVemjA5q3KFz1eleKBeXmXxacj6U3lymuXFU=",
       "Microsoft.AspNetCore.Components.dll": "sha256-b+CYXyXwKQ96Z7t\/BtnC0hXXAvdZwsd7Ddv0nJQIcmU=",
@@ -27,7 +27,7 @@
       "Microsoft.Extensions.Primitives.dll": "sha256-eXvGx2jcjpTPEJoAHBsW\/VuMPbNyyU+AsuhPmkzSSRY=",
       "Microsoft.JSInterop.dll": "sha256-bH4kPtwztJ0GcMQgTZeRZ6ClbhrWt9hXT97QRGzz+bs=",
       "Microsoft.JSInterop.WebAssembly.dll": "sha256-Fibw4jtnMD0se9VIfLv5hPcrbAm7ipCW+RN8CfPIDkY=",
-      "MisSeries.Web.dll": "sha256-nqpB8UcmD+D1j0fu\/YRgnh3vYLuY\/3dkf\/VLwcEaZy4=",
+      "MisSeries.Web.dll": "sha256-D35RQ+mtJad8\/CZphbM2lgA7bPTgFRy0tSZzsaS4kF0=",
       "System.Collections.Concurrent.dll": "sha256-yCjlEBUKVHBUrK8ORcpJ2WkSCVPZsT\/nOZ0NrT81FIA=",
       "System.Collections.dll": "sha256-KRvIwfAKOL3gsrVBcupgCZzvJw+t\/O8pHQOIIk2S\/1E=",
       "System.ComponentModel.dll": "sha256-JQ9eaiVjufiLP3W7JUKbZwepJ9BYL5QK1275lhmazRk=",
@@ -51,9 +51,9 @@
     "libraryInitializers": null,
     "pdb": null,
     "runtime": {
-      "dotnet.7.0.9.48p7dojgw9.js": "sha256-kzLKYDPv28UFvBE8VNO7gmR7RIFSwDKPVrB9h6pxZ\/w=",
+      "dotnet.7.0.9.48p7dojgw9.js": "sha256-sMRILO0hGRYDz9UYG6SwAMMFW1RIJsl6rgsuJ35GLgQ=",
       "dotnet.timezones.blat": "sha256-dKqztlnWPN3rvLJRCI444rLYX55dtIQt\/DQkFslO+z4=",
-      "dotnet.wasm": "sha256-\/2j1jt1+1saZ73NR1OeIjwvwAkaCUAJYI0ECuelXukY=",
+      "dotnet.wasm": "sha256-PqDR3iBsED8QR8atTpnsNWLcZrzE\/3zHPzNSsFL98MQ=",
       "icudt_CJK.dat": "sha256-SZLtQnRc0JkwqHab0VUVP7T3uBPSeYzxzDnpxPpUnHk=",
       "icudt_EFIGS.dat": "sha256-8fItetYY8kQ0ww6oxwTLiT3oXlBwHKumbeP2pRF4yTc=",
       "icudt_no_CJK.dat": "sha256-L7sV7NEYP37\/Qr2FPCePo5cJqRgTXRwGHuwF5Q+0Nfs=",
@@ -62,7 +62,7 @@
     "runtimeAssets": {
       "dotnet.wasm": {
         "behavior": "dotnetwasm",
-        "hash": "sha256-\/2j1jt1+1saZ73NR1OeIjwvwAkaCUAJYI0ECuelXukY="
+        "hash": "sha256-PqDR3iBsED8QR8atTpnsNWLcZrzE\/3zHPzNSsFL98MQ="
       }
     },
     "satelliteResources": {
