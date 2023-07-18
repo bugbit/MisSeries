@@ -1,4 +1,4 @@
-﻿using Blazored.SessionStorage;
+﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
 using MisSeries.Web.Services.Trakt;
 using System.Security.Claims;
@@ -7,10 +7,10 @@ namespace MisSeries.Web.Extensions.Authentication;
 
 public class TraktAuthenticationStateProvider : AuthenticationStateProvider
 {
-    private readonly ISessionStorageService _sessionStorage;
+    private readonly ILocalStorageService _sessionStorage;
     private readonly TraktApi _traktApi;
 
-    public TraktAuthenticationStateProvider(ISessionStorageService sessionStorage, TraktApi traktApi)
+    public TraktAuthenticationStateProvider(ILocalStorageService sessionStorage, TraktApi traktApi)
     {
         _sessionStorage = sessionStorage;
         _traktApi = traktApi;

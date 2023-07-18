@@ -1,4 +1,4 @@
-using Blazored.SessionStorage;
+using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -18,6 +18,6 @@ builder.Services.AddLocalization(opts => opts.ResourcesPath = "Resources");
 
 builder.Services.AddOptions();
 builder.Services.AddAuthorizationCore();
-builder.Services.AddBlazoredSessionStorage();
+builder.Services.AddBlazoredLocalStorageAsSingleton();
 
 await builder.Build().RunAsync();
