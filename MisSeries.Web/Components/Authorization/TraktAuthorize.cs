@@ -12,13 +12,13 @@ public class TraktAuthorize : ComponentBase
     protected override void OnInitialized()
     {
         var urlLogin = NavManager.ToAbsoluteUri("login").ToString();
-        var returnUrl = NavManager.Uri;
-        var redirect_uri = NavManager.GetUriWithQueryParameters
-        (
-            urlLogin,
-            new Dictionary<string, object?>
-            { ["returnUrl"] = returnUrl }
-        );
+        //var returnUrl = NavManager.Uri;
+        //var redirect_uri = NavManager.GetUriWithQueryParameters
+        //(
+        //    urlLogin,
+        //    new Dictionary<string, object?>
+        //    { ["returnUrl"] = returnUrl }
+        //);
         //var uri = TraktApi.GetUrlAuthorize(returnUrl);
         var uri = TraktApi.GetUrlAuthorize(urlLogin);
 

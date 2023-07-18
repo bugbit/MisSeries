@@ -28,8 +28,9 @@
             {
                 await TraktAccountSrv.LoginAsync(Code, CancellationToken.None);
 
-                if (!string.IsNullOrEmpty(ReturnUrl))
-                    NavManager.NavigateTo(ReturnUrl, false);
+                var returnUrl = ReturnUrl ?? NavManager.ToAbsoluteUri("").ToString();
+
+                NavManager.NavigateTo(returnUrl, false);
             }
             catch (Exception ex)
             {

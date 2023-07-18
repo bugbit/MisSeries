@@ -1,4 +1,5 @@
-﻿using MisSeries.Web.Extensions.Authentication;
+﻿using Microsoft.AspNetCore.Components.Authorization;
+using MisSeries.Web.Extensions.Authentication;
 
 namespace MisSeries.Web.Services.Trakt;
 
@@ -7,10 +8,10 @@ public class TraktAccountServices
     private readonly TraktApi _traktApi;
     private readonly TraktAuthenticationStateProvider _traktAuthenticationStateProvider;
 
-    public TraktAccountServices(TraktApi traktApi, TraktAuthenticationStateProvider traktAuthenticationStateProvider)
+    public TraktAccountServices(TraktApi traktApi, AuthenticationStateProvider traktAuthenticationStateProvider)
     {
         _traktApi = traktApi;
-        _traktAuthenticationStateProvider = traktAuthenticationStateProvider;
+        _traktAuthenticationStateProvider = (TraktAuthenticationStateProvider)traktAuthenticationStateProvider;
     }
 
     public async Task LoginAsync(string code, CancellationToken cancellationToken)
