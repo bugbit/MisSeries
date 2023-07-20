@@ -1,7 +1,8 @@
 ﻿@page "/"
 @inject TraktAccountServices TraktAccountSrv
 
-<PageTitle>Index</PageTitle><AuthorizeView>
+<PageTitle>Index</PageTitle>
+<AuthorizeView>
     <Authorized Context="AuthState">
         <h1>Hello, @AuthState.User.Identity?.Name</h1>
         <button class="btn btn-danger" @onclick="async()=>await TraktAccountSrv.LogOffAsync(default)">Desconectar</button>
