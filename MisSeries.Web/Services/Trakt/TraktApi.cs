@@ -47,10 +47,10 @@ namespace MisSeries.Web.Services.Trakt
                     }
                 );
 
-        public async Task<ApiTokenResponse> TokenAsync(string code, CancellationToken cancellationToken)
+        public async Task<TokenResponse> TokenAsync(string code, CancellationToken cancellationToken)
         {
             var uri = new Uri(_httpClient.BaseAddress!, "/oauth/token");
-            var response = await _httpClient.PostAsJsonAsync(uri, new ApiTokenRequest
+            var response = await _httpClient.PostAsJsonAsync(uri, new TokenRequest
             {
                 Client_id = _clientId.Value,
                 Client_secret = _clientSecret.Value,
@@ -62,12 +62,12 @@ namespace MisSeries.Web.Services.Trakt
             cancellationToken.ThrowIfCancellationRequested();
 
             if (response.IsSuccessStatusCode)
-                return await response.Content.ReadFromJsonAsync<ApiTokenResponse>() ?? new();
+                return await response.Content.ReadFromJsonAsync<TokenResponse>() ?? new();
 
             throw TraktApiException.CreateByStatusCode(response.StatusCode, _Localizer);
         }
 
-        public async Task<ApiUsersSettingsRequest> UsersSettingsAsync(CancellationToken cancellationToken)
+        public async Task<UsersSettingsRequest> UsersSettingsAsync(CancellationToken cancellationToken)
         {
             var uri = new Uri(_httpClient.BaseAddress!, "/users/settings");
             var response = await _httpClient.GetAsync(uri, cancellationToken);
@@ -75,7 +75,7 @@ namespace MisSeries.Web.Services.Trakt
             cancellationToken.ThrowIfCancellationRequested();
 
             if (response.IsSuccessStatusCode)
-                return await response.Content.ReadFromJsonAsync<ApiUsersSettingsRequest>() ?? new();
+                return await response.Content.ReadFromJsonAsync<UsersSettingsRequest>() ?? new();
 
             throw TraktApiException.CreateByStatusCode(response.StatusCode, _Localizer);
         }

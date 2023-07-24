@@ -1,6 +1,6 @@
 ﻿namespace MisSeries.Web.Services.Trakt.Request;
 
-public class ApiUsersSettingsRequest
+public class UsersSettingsRequest
 {
     public class JSUser
     {

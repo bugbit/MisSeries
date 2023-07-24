@@ -1,6 +1,6 @@
 ﻿namespace MisSeries.Web.Services.Trakt.Request
 {
-    public class ApiTokenRequest
+    public class TokenRequest
     {
         public string? Code { get; set; }
         public string? RefreshToken { get; set; }
