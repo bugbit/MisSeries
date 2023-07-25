@@ -1,6 +1,6 @@
 ﻿namespace MisSeries.Web.Services.Trakt.Request;
 
-public class SyncWatchedShowShowRequest
+public class ShowRequest
 {
     public string? Title { get; set; }
     public int? Year { get; set; }

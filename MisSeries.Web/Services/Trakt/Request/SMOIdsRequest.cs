@@ -15,7 +15,7 @@ public class SMOIdsRequest
     public int? Trakt { get; set; }
     public string? Slung { get; set; }
     public int? Tvdb { get; set; }
-    public int? Imdb { get; set; }
+    public string? Imdb { get; set; }
     public int? Tmdb { get; set; }
     public int? Tvrage { get; set; }
 }

@@ -1,24 +1,25 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
 using MisSeries.Web.Services.Trakt;
+using System.Security;
 using System.Security.Claims;
 
 namespace MisSeries.Web.Extensions.Authentication;
 
 public class TraktAuthenticationStateProvider : AuthenticationStateProvider
 {
-    private readonly ILocalStorageService _sessionStorage;
+    private readonly ILocalStorageService _localStorage;
     private readonly TraktApi _traktApi;
 
     public TraktAuthenticationStateProvider(ILocalStorageService sessionStorage, TraktApi traktApi)
     {
-        _sessionStorage = sessionStorage;
+        _localStorage = sessionStorage;
         _traktApi = traktApi;
     }
 
     public async override Task<AuthenticationState> GetAuthenticationStateAsync()
     {
-        var storedToken = await _sessionStorage.GetItemAsync<TokenData>("token");
+        var storedToken = await _localStorage.GetItemAsync<TokenData>("token");
         ClaimsIdentity claimsIdentity;
 
         if (storedToken != null)
@@ -56,7 +57,7 @@ public class TraktAuthenticationStateProvider : AuthenticationStateProvider
 
     public async Task SetCurrentUserAsync(TokenData userData, CancellationToken cancellationToken)
     {
-        await _sessionStorage.SetItemAsync("token", userData, cancellationToken);
+        await _localStorage.SetItemAsync("token", userData, cancellationToken);
 
         cancellationToken.ThrowIfCancellationRequested();
 
@@ -76,11 +77,41 @@ public class TraktAuthenticationStateProvider : AuthenticationStateProvider
         var anonymousPrincipal = new ClaimsPrincipal(new ClaimsIdentity());
         var authStateTask = Task.FromResult(new AuthenticationState(anonymousPrincipal));
 
-        await _sessionStorage.RemoveItemAsync("token", cancellationToken);
+        await _localStorage.RemoveItemAsync("token", cancellationToken);
         /*
          * El método NotifyAuthenticationStateChanged(), proporcionado por la clase base, notifica a todos los componentes suscritos del cambio de estado,
          * a la vez que les envía la tarea (en este caso, resuelta) para obtener el estado de autenticación actual.
          */
         NotifyAuthenticationStateChanged(authStateTask);
+    }
+
+    public async Task<(DateTime expirateDate, string refreshToken)> GetDataForRefreshToken(CancellationToken cancellationToken)
+    {
+        var data = await _localStorage.GetItemAsync<TokenData>("token", cancellationToken);
+
+        cancellationToken.ThrowIfCancellationRequested();
+
+        if (data == null)
+            throw new SecurityException("Token borrado");
+
+        return (data.ExpirateDate, data.refreshToken);
+    }
+
+    public async Task RefreshToken(string accessToken, string refreshToken, DateTime expirateDate, CancellationToken cancellationToken)
+    {
+        var data = await _localStorage.GetItemAsync<TokenData>("token", cancellationToken);
+
+        cancellationToken.ThrowIfCancellationRequested();
+
+        if (data == null)
+            throw new SecurityException("Token borrado");
+
+        data.AccessToken = accessToken;
+        data.refreshToken = refreshToken;
+        data.ExpirateDate = expirateDate;
+
+        await _localStorage.SetItemAsync("token", data, cancellationToken);
+
+        cancellationToken.ThrowIfCancellationRequested();
     }
 }

@@ -6,6 +6,7 @@
         public DateTime? Last_watched_at { get; set; }
         public DateTime? Last_updated_at { get; set; }
         public DateTime? Reset_at { get; set; }
-        public SyncWatchedShowShowRequest? Show { get; set; }
+        public ShowRequest? Show { get; set; }
+        public SeasonsRequest[]? Seasons { get; set; }
     }
 }

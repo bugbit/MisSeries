@@ -16,15 +16,12 @@ namespace MisSeries.Web.Services.Trakt
         private static Lazy<string> _clientSecret = new(() => GetClientSecret());
         private readonly NavigationManager _navigationManager;
         private readonly IStringLocalizer _Localizer;
-        private readonly HttpClient _httpClient;
+        private HttpClient _httpClient;
 
         public TraktApi(NavigationManager navigationManager, IStringLocalizer<TraktApi> localizer)
         {
             _navigationManager = navigationManager;
-            _httpClient = new HttpClient
-            {
-                BaseAddress = new Uri("https://api.trakt.tv")
-            };
+            CreateHttpClient();
             _Localizer = localizer;
         }
 
@@ -67,6 +64,35 @@ namespace MisSeries.Web.Services.Trakt
             throw TraktApiException.CreateByStatusCode(response.StatusCode, _Localizer);
         }
 
+        public async Task<TokenResponse> RefreshTokenAsync(string refreshToken, CancellationToken cancellationToken)
+        {
+            var uri = new Uri(_httpClient.BaseAddress!, "/oauth/token");
+            var response = await _httpClient.PostAsJsonAsync(uri, new TokenRequest
+            {
+                Client_id = _clientId.Value,
+                Client_secret = _clientSecret.Value,
+                Refresh_token = refreshToken,
+                Redirect_uri = _navigationManager.ToAbsoluteUri("login").ToString(),
+                Grant_type = GrantTypes.RefreshToken
+            }, cancellationToken);
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadFromJsonAsync<TokenResponse>() ?? new();
+
+                // after read api, reset de httpClient so the followers fetch send cors errors!
+                _httpClient.CancelPendingRequests();
+                _httpClient.Dispose();
+                CreateHttpClient();
+
+                return result;
+            }
+
+            throw TraktApiException.CreateByStatusCode(response.StatusCode, _Localizer);
+        }
+
         public async Task<UsersSettingsRequest> UsersSettingsAsync(CancellationToken cancellationToken)
         {
             var uri = new Uri(_httpClient.BaseAddress!, "/users/settings");
@@ -76,6 +102,20 @@ namespace MisSeries.Web.Services.Trakt
 
             if (response.IsSuccessStatusCode)
                 return await response.Content.ReadFromJsonAsync<UsersSettingsRequest>() ?? new();
+
+            throw TraktApiException.CreateByStatusCode(response.StatusCode, _Localizer);
+        }
+
+
+        public async Task<SyncWatchedShowRequest[]> SyncWatchedShow(CancellationToken cancellationToken)
+        {
+            var uri = new Uri(_httpClient.BaseAddress!, "/sync/watched/shows");
+            var response = await _httpClient.GetAsync(uri, cancellationToken);
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            if (response.IsSuccessStatusCode)
+                return await response.Content.ReadFromJsonAsync<SyncWatchedShowRequest[]>() ?? new SyncWatchedShowRequest[0];
 
             throw TraktApiException.CreateByStatusCode(response.StatusCode, _Localizer);
         }
@@ -116,5 +156,13 @@ namespace MisSeries.Web.Services.Trakt
         static extern int getClientId(nint data, int maxlen);
         [DllImport("Trakt")]
         static extern int getClientSecret(nint data, int maxlen);
+
+        private void CreateHttpClient()
+        {
+            _httpClient = new HttpClient
+            {
+                BaseAddress = new Uri("https://api.trakt.tv")
+            };
+        }
     }
 }

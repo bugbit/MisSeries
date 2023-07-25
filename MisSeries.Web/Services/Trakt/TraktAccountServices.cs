@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MisSeries.Web.Extensions.Authentication;
+using MisSeries.Web.Services.Trakt.Response;
 
 namespace MisSeries.Web.Services.Trakt;
 
@@ -54,7 +55,7 @@ public class TraktAccountServices
         {
             AccessToken = response.Access_token,
             TokenType = response.Token_type,
-            RefreshType = response.Refresh_token ?? string.Empty,
+            refreshToken = response.Refresh_token ?? string.Empty,
             ExpirateDate = DateTime.Now.AddSeconds(response.Expires_in.GetValueOrDefault()),
             Username = responseUser.User?.Username ?? string.Empty,
             Slug = responseUser.User?.Ids?.Slug ?? string.Empty,
@@ -70,6 +71,29 @@ public class TraktAccountServices
         await _traktAuthenticationStateProvider.ClearCurrentUser(cancellationToken);
 
         GoHome();
+    }
+
+    public async Task<bool> RefreshTokenIfNecesary(CancellationToken cancellationToken)
+    {
+        var data = await _traktAuthenticationStateProvider.GetDataForRefreshToken(cancellationToken);
+
+        cancellationToken.ThrowIfCancellationRequested();
+
+        var diff = data.expirateDate - DateTime.Now;
+
+        if (diff.Days > 1)
+            return false;
+
+        var response = await _traktApi.RefreshTokenAsync(data.refreshToken, cancellationToken);
+
+        cancellationToken.ThrowIfCancellationRequested();
+
+        _traktApi.SetAuthorization(response.Token_type!, response.Access_token!);
+        await _traktAuthenticationStateProvider.RefreshToken(response.Access_token!, response.Refresh_token!, DateTime.Now.AddSeconds(response.Expires_in.GetValueOrDefault()), cancellationToken);
+
+        cancellationToken.ThrowIfCancellationRequested();
+
+        return true;
     }
 
     private void GoHome()
