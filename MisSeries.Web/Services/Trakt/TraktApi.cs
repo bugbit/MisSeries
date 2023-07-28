@@ -2,8 +2,10 @@
 using System.Reflection.PortableExecutable;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.Json;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
+using MisSeries.Web.JsonConverter;
 using MisSeries.Web.Services.Trakt.Request;
 using MisSeries.Web.Services.Trakt.Response;
 
@@ -17,12 +19,15 @@ namespace MisSeries.Web.Services.Trakt
         private readonly NavigationManager _navigationManager;
         private readonly IStringLocalizer _Localizer;
         private HttpClient _httpClient;
+        private JsonSerializerOptions _serializerOptionsDefault;
 
         public TraktApi(NavigationManager navigationManager, IStringLocalizer<TraktApi> localizer)
         {
             _navigationManager = navigationManager;
             CreateHttpClient();
             _Localizer = localizer;
+            _serializerOptionsDefault = new JsonSerializerOptions(JsonSerializerOptions.Default);
+            _serializerOptionsDefault.Converters.Add(new DateTimeISO8601Converter());
         }
 
         public void SetAuthorization(string token_type, string access_token)
@@ -59,7 +64,7 @@ namespace MisSeries.Web.Services.Trakt
             cancellationToken.ThrowIfCancellationRequested();
 
             if (response.IsSuccessStatusCode)
-                return await response.Content.ReadFromJsonAsync<TokenResponse>() ?? new();
+                return await response.Content.ReadFromJsonAsync<TokenResponse>(_serializerOptionsDefault, cancellationToken) ?? new();
 
             throw TraktApiException.CreateByStatusCode(response.StatusCode, _Localizer);
         }
@@ -80,7 +85,7 @@ namespace MisSeries.Web.Services.Trakt
 
             if (response.IsSuccessStatusCode)
             {
-                var result = await response.Content.ReadFromJsonAsync<TokenResponse>() ?? new();
+                var result = await response.Content.ReadFromJsonAsync<TokenResponse>(_serializerOptionsDefault, cancellationToken) ?? new();
 
                 // after read api, reset de httpClient so the followers fetch send cors errors!
                 _httpClient.CancelPendingRequests();
@@ -101,7 +106,7 @@ namespace MisSeries.Web.Services.Trakt
             cancellationToken.ThrowIfCancellationRequested();
 
             if (response.IsSuccessStatusCode)
-                return await response.Content.ReadFromJsonAsync<UsersSettingsRequest>() ?? new();
+                return await response.Content.ReadFromJsonAsync<UsersSettingsRequest>(_serializerOptionsDefault, cancellationToken) ?? new();
 
             throw TraktApiException.CreateByStatusCode(response.StatusCode, _Localizer);
         }
@@ -115,7 +120,7 @@ namespace MisSeries.Web.Services.Trakt
             cancellationToken.ThrowIfCancellationRequested();
 
             if (response.IsSuccessStatusCode)
-                return await response.Content.ReadFromJsonAsync<SyncWatchedShowRequest[]>() ?? new SyncWatchedShowRequest[0];
+                return await response.Content.ReadFromJsonAsync<SyncWatchedShowRequest[]>(_serializerOptionsDefault, cancellationToken) ?? new SyncWatchedShowRequest[0];
 
             throw TraktApiException.CreateByStatusCode(response.StatusCode, _Localizer);
         }
