@@ -1,0 +1,23 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "dotnet",
+			"task": "build",
+			"problemMatcher": [
+				"$msCompile"
+			],
+			"group": "build",
+			"label": "dotnet: build"
+		},
+		{
+			"type": "dotnet",
+			"task": "watch MisSeries.Web",
+			"file": "/home/oscar/proyectos/oscar/MisSeries/MisSeries.Web/MisSeries.Web.csproj",
+			"problemMatcher": [
+				"$msCompile"
+			],
+			"label": "dotnet: watch MisSeries.Web"
+		}
+	]
+}
