@@ -26,7 +26,17 @@ namespace MisSeries.Web.Services.Trakt
             _navigationManager = navigationManager;
             CreateHttpClient();
             _Localizer = localizer;
-            _serializerOptionsDefault = new JsonSerializerOptions(JsonSerializerOptions.Default);
+            /*
+Option values appropriate to Web-based scenarios.
+This member implies that:
+- Property names are treated as case-insensitive.
+- "camelCase" name formatting should be employed.
+- Quoted numbers (JSON strings for number properties) are allowed.
+             */
+            _serializerOptionsDefault = new JsonSerializerOptions();
+            _serializerOptionsDefault.PropertyNameCaseInsensitive = true;
+            _serializerOptionsDefault.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+            _serializerOptionsDefault.AllowTrailingCommas = true;
             _serializerOptionsDefault.Converters.Add(new DateTimeISO8601Converter());
         }
 

@@ -15,6 +15,9 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
+builder.Logging.SetMinimumLevel(builder.HostEnvironment.IsProduction() ? LogLevel.None : LogLevel.Warning);
+
+builder.Services.AddBlazoredLocalStorageAsSingleton();
 builder.Services.AddFileSystemAccessService();
 builder.Services.AddScoped<TraktApi>();
 builder.Services.AddScoped<AuthenticationStateProvider, TraktAuthenticationStateProvider>();
@@ -30,7 +33,6 @@ builder.Services.AddLocalization(opts => opts.ResourcesPath = "Resources");
 
 builder.Services.AddOptions();
 builder.Services.AddAuthorizationCore();
-builder.Services.AddBlazoredLocalStorageAsSingleton();
 
 var host = builder.Build();
 

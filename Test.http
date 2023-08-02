@@ -37,3 +37,15 @@ X-Pagination-Page-Count: 10
 X-Pagination-Item-Count: 100
 
 ###
+
+GET https://api.trakt.tv/sync/history
+Content-Type: application/json
+Authorization: Bearer
+trakt-api-version: 2
+trakt-api-key: 
+X-Pagination-Page: 1
+X-Pagination-Limit: 10
+X-Pagination-Page-Count: 10
+X-Pagination-Item-Count: 100
+
+###

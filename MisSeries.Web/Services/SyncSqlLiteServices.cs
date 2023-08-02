@@ -4,11 +4,13 @@ namespace MisSeries.Web.Services;
 
 public class SyncSqlLiteServices
 {
+    private readonly ILogger<SyncSqlLiteServices> _logger;
     private readonly FileSystemAccessService _fileSystemAccessService;
     private FileSystemFileHandle? _fileHandle;
 
-    public SyncSqlLiteServices(FileSystemAccessService fileSystemAccessService)
+    public SyncSqlLiteServices(ILogger<SyncSqlLiteServices> logger, FileSystemAccessService fileSystemAccessService)
     {
+        _logger = logger;
         _fileSystemAccessService = fileSystemAccessService;
     }
 
@@ -41,7 +43,7 @@ public class SyncSqlLiteServices
 
         await dbContext.Database.CloseConnectionAsync();
 
-        Console.WriteLine($"{dataSource} write {buffer.Length} bytes");
+        _logger.LogInformation($"{dataSource} write {buffer.Length} bytes");
 
         await System.IO.File.WriteAllBytesAsync(dataSource, buffer, cancellationToken);
 
@@ -52,7 +54,7 @@ public class SyncSqlLiteServices
 
     internal async Task PersistenceAsync(DbContext dbContext, CancellationToken cancellationToken = default)
     {
-        Console.WriteLine("Start saving database");
+        _logger.LogInformation("Start saving database");
         await dbContext.Database.CloseConnectionAsync();
 
         var dataSource = dbContext.Database.GetDataSource();
@@ -60,7 +62,7 @@ public class SyncSqlLiteServices
 
         cancellationToken.ThrowIfCancellationRequested();
 
-        Console.WriteLine($"{dataSource} read {buffer.Length} bytes");
+        _logger.LogInformation($"{dataSource} read {buffer.Length} bytes");
 
         var options = new FileSystemCreateWritableOptions { KeepExistingData = false };
         var writer = await _fileHandle.CreateWritableAsync(options);
@@ -73,7 +75,7 @@ public class SyncSqlLiteServices
 
         cancellationToken.ThrowIfCancellationRequested();
 
-        Console.WriteLine("Finish save database");
+        _logger.LogInformation("Finish save database");
     }
 
     public async Task EnsureDeletedAsync(DbContext dbContext, CancellationToken cancellationToken = default)
